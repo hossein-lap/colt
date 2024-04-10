@@ -258,8 +258,14 @@ function M.trigger(opts)
 	local ft = opts.filetype or vim.bo.filetype
 	local exe = opts.work or "run"
 	local window = opts.window or "t"
-	local builtin = opts.builtin or true
 	local silent = opts.silent or nil
+
+	local builtin = true
+	if opts.builtin == nil then
+		builtin = true
+	else
+		builtin = opts.builtin
+	end
 
 	-- all commands {{{
 	local function all_commands()
