@@ -252,6 +252,9 @@ end
 
 -- setup {{{
 function M.trigger(opts)
+	if opts == nil then
+		opts = {}
+	end
 	local ft = opts.filetype or vim.bo.filetype
 	local exe = opts.work or "run"
 	local window = opts.window or "t"
@@ -259,11 +262,10 @@ function M.trigger(opts)
 	local silent = opts.silent or nil
 
 	-- all commands {{{
-	local command = function()
-		local output = opts.exe
+	local function all_commands()
 		local src_name = ''
 		local out_name = ''
-		if output ~= 'compile' then
+		if exe ~= 'compile' then
 			src_name = vim.fn.expand('%:p')
 			out_name = vim.fn.expand('%:p:r')
 		else
@@ -331,10 +333,10 @@ function M.trigger(opts)
 			cmd = vim.tbl_extend("force", cmd, opts.extra_cmd)
 		end
 
-		if cmd[output][ft] ~= nil then
-			return tostring(cmd[output][ft])
+		if cmd[exe][ft] ~= nil then
+			return tostring(cmd[exe][ft])
 		else
-			if output == 'run' then
+			if exe == 'run' then
 				return src_name
 			else
 				return nil
@@ -342,6 +344,7 @@ function M.trigger(opts)
 		end
 	end
 	-- }}}
+	local command = all_commands()
 
 	if command == nil then
 		vim.notify(string.format("[%s]: %s <%s> %s", exe,
@@ -349,11 +352,13 @@ function M.trigger(opts)
 			        3, {title = "wrapcmd()"})
 		return 1
 	end
-	if command == nil then
+	if command == nil or command == "" then
 		vim.notify("no filetype is specified for wrapcmd()",
 			        3, {title = "wrapcmd()"})
 		return 289
 	end
+
+	-- error(command)
 
 	if exe == "run" then
 		M.run(command, {builtin = builtin, window = window})
