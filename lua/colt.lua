@@ -251,7 +251,7 @@ end
 -- }}}
 
 -- setup {{{
-function M.setup(opts)
+function M.trigger(opts)
 	local ft = opts.filetype or vim.bo.filetype
 	local exe = opts.work or "run"
 	local window = opts.window or "t"
