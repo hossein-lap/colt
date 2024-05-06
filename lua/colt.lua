@@ -215,6 +215,7 @@ end
 
 -- quickfix {{{
 function M.quickfix(command, opts)
+	local time = os.date("%y/%m/%d %H:%M:%S")
 	if opts == nil then
 		opts = {}
 	end
@@ -236,7 +237,8 @@ function M.quickfix(command, opts)
 	end
 	vim.api.nvim_command(cmd)
 	if vim.v.shell_error ~= 0 then
-		vim.notify(string.format("[error]: %s: [%s]: %s",
+		vim.notify(string.format("%s [error]: %s: [%s]: %s",
+			                      time,
 			                      vim.v.shell_error,
 			                      prompt,
 			                      string.gsub(command, "\n", "")
@@ -353,7 +355,7 @@ function M.trigger(opts)
 	local command = all_commands()
 
 	if command == nil then
-		vim.notify(string.format("[%s]: %s <%s> %s", exe,
+		vim.notify(string.format("%s [%s]: %s <%s> %s", time, exe,
 			        "no command is defined for", ft, "filetype"),
 			        3, {title = "wrapcmd()"})
 		return 1
