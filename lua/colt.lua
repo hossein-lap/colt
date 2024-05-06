@@ -215,7 +215,7 @@ end
 
 -- quickfix {{{
 function M.quickfix(command, opts)
-	local time = os.date("%y/%m/%d %H:%M:%S")
+	local time = os.date("%H:%M:%S")
 	if opts == nil then
 		opts = {}
 	end
@@ -237,14 +237,14 @@ function M.quickfix(command, opts)
 	end
 	vim.api.nvim_command(cmd)
 	if vim.v.shell_error ~= 0 then
-		vim.notify(string.format("%s [error]: %s: [%s]: %s",
-			                      time,
-			                      vim.v.shell_error,
+		vim.notify(string.format("[%s] Error %s \"%s\" [Returned %s]",
 			                      prompt,
-			                      string.gsub(command, "\n", "")
+			                      time,
+			                      string.gsub(command, "\n", ""),
+			                      vim.v.shell_error
 					), 3)
 	else
-		vim.notify(string.format("[%s]: %s", prompt, string.gsub(command, "\n", "")), 2)
+		vim.notify(string.format("[%s] %s \"%s\"", prompt, time, string.gsub(command, "\n", "")), 2)
 	end
 	if prompt == "debug" then
 		vim.api.nvim_command("copen")
