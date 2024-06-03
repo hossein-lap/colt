@@ -303,10 +303,10 @@ function M.trigger(opts)
 			},
 			compile = {
 				-- programs
-				c = string.format('gcc %s -o %s', src_name, out_name),
-				cpp = string.format('g++ %s -o %s', src_name, out_name),
+				c = string.format('gcc -s %s -o %s', src_name, out_name),
+				cpp = string.format('g++ -s %s -o %s', src_name, out_name),
 				rust = string.format('rustc %s -o %s', src_name, out_name),
-				go = 'go build '..src_name,
+				go = string.format('go build -o %s %s', out_name, src_name),
 
 				-- documents
 				nroff = string.format('pdfroff -U -mspdf %s > %s.pdf', src_name,
@@ -319,10 +319,10 @@ function M.trigger(opts)
 							"output_format='all'")
 			},
 			debug = {
-				c = string.format('gcc -Wall %s -o %s', src_name, out_name),
-				cpp = string.format('g++ -Wall %s -o %s', src_name, out_name),
+				c = string.format('gcc -g -Wall %s -o %s', src_name, out_name),
+				cpp = string.format('g++ -g -Wall %s -o %s', src_name, out_name),
 				rust = string.format('rustc %s -o %s', src_name, out_name),
-				go = 'go build '..src_name,
+				go = 'CGO_DISABLED=0 GOOS=linux go build .',
 
 				-- documents
 				nroff = string.format('pdfroff -Wall -U -mspdf %s > %s.pdf',
